@@ -3,45 +3,77 @@ package com.example.prnvdemoapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.prnvdemoapp.ui.theme.PrnvDemoAppTheme
+import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            PrnvDemoAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Pranav",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            MyApp()
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun MyApp() {
+    var screen by remember { mutableStateOf(1) }
+    var name by remember { mutableStateOf("") }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PrnvDemoAppTheme {
-        Greeting("Pranav")
+    when (screen) {
+
+        // 🔹 Screen 1: Welcome
+        1 -> {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Welcome 👋", style = MaterialTheme.typography.headlineMedium)
+                Spacer(modifier = Modifier.height(20.dp))
+                Button(onClick = { screen = 2 }) {
+                    Text("Start")
+                }
+            }
+        }
+
+        // 🔹 Screen 2: Input
+        2 -> {
+            Column(
+                modifier = Modifier.fillMaxSize().padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Enter your name")
+                Spacer(modifier = Modifier.height(20.dp))
+
+                TextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("Enter your name") }
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Button(onClick = { screen = 3 }) {
+                    Text("Submit")
+                }
+            }
+        }
+
+        // 🔹 Screen 3: Result
+        3 -> {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Hello $name 🎉", style = MaterialTheme.typography.headlineMedium)
+            }
+        }
     }
 }
